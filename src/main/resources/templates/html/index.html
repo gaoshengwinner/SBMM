@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<link href="css/styles.css" rel="stylesheet" />
+<style type="text/css">
+* {
+	padding: 0;
+	margin: 0;
+}
+
+.logindiv {
+	width: 40%;
+	height: 400px;
+	left: 0;
+	right: 0;
+	margin: auto;
+	margin-top: 20px;
+	background-color: #F8FAFB;
+	padding-left: 20px;
+	box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+}
+</style>
+<script src="js/jquery-3.4.0.min.js"></script>
+<script>
+	
+</script>
+<title th:text="#{login.title}"></title>
+</head>
+<body style="padding: 0; margin: 0">
+	<form action="/login" th:action="@{/login}">
+		<div th:include="html/head::commehead"></div>
+		<div class="logindiv">
+			<a href=/logininit>Logout</a>
+		</div>
+	</form>
+</body>
+</html>
