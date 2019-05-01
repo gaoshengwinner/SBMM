@@ -2,5 +2,6 @@
 	<div 
 		style="padding-left: 30px; height: 50px; width: 100%; background-color: cadetblue">
 		<h1 th:text="#{login.welcome}">Welcome to technology sharing</h1>
+		<h1 th:if="${session.loginInfo}" th:text="${session.loginInfo.name}">g</h1>
 	</div>
 </DIV>

@@ -29,19 +29,21 @@
 <title th:text="#{login.title}"></title>
 </head>
 <body style="padding: 0; margin: 0">
-	<form action="/login" th:action="@{/login}">
+	<form action="/login" th:action="@{/login}" th:object="${loginForm}">
 		<div th:include="html/head::commehead"></div>
 		<div class="logindiv">
 			<h1 th:text="#{login.login}">Login!</h1>
 
+<br /> <font th:if="${#fields.hasErrors('accmail')}" color="red"
+				th:errors="*{accmail}"></font>
 			<div style="margin-bottom: 15px;">
-				<input type="text" id="username" name="username"
+				<input th:field="*{accmail}" type="text"
 					style="width: 80%; height: 35px; line-height: 1.3; font-size: 19px; margin-bottom: 15px;"
 					th:placeholder="#{login.mail}" autocorrect="off"
 					autocapitalize="off">
 			</div>
 			<div style="margin-bottom: 15px;">
-				<input name="password"
+				<input th:field="*{passwd}"
 					style="height: 35px; line-height: 1.3; font-size: 19px; margin-bottom: 15px;"
 					id="password" type="password" th:placeholder="#{login.psw}"
 					value="" autocomplete="off"> <span

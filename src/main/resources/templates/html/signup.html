@@ -12,7 +12,7 @@
 
 .logindiv {
 	width: 40%;
-	height: 400px;
+	height: 100%;
 	left: 0;
 	right: 0;
 	margin: auto;
@@ -29,42 +29,69 @@
 <title th:text="#{signup.title}"></title>
 </head>
 <body style="padding: 0; margin: 0">
-	<div th:include="html/head::commehead"></div>
-	<div class="logindiv">
-		<h1 th:text="#{signup.signup}">Create a SBMM account!</h1>
+	<form action="/login" th:action="@{/signup}" th:object="${accForm}"
+		method="post">
+		<div th:include="html/head::commehead"></div>
+		<div class="logindiv">
+			<h1 th:text="#{signup.signup}">Create a SBMM account!</h1>
+			<br /> <font th:if="${#fields.hasErrors('accmail')}" color="red"
+				th:errors="*{accmail}"></font>
+			<div style="margin-bottom: 15px;">
+				<input type="text" th:field="*{accmail}"
+					style="width: 80%; height: 35px; line-height: 1.3; font-size: 19px; margin-bottom: 15px;"
+					th:placeholder="#{signup.mail}" autocorrect="off"
+					autocapitalize="off">
+			</div>
 
-		<div style="margin-bottom: 15px;">
+			<font th:if="${#fields.hasErrors('name')}" color="red"
+				th:errors="*{name}"></font>
+			<div style="margin-bottom: 15px;">
+				<input type="text" th:field="*{name}"
+					style="width: 80%; height: 35px; line-height: 1.3; font-size: 19px; margin-bottom: 15px;"
+					th:placeholder="#{signup.name}" autocorrect="off"
+					autocapitalize="off">
+			</div>
+			
+			<font th:if="${#fields.hasErrors('nameyoread')}" color="red"
+				th:errors="*{nameyoread}"></font>
+			<div style="margin-bottom: 15px;">
+				<input type="text" th:field="*{nameyoread}"
+					style="width: 80%; height: 35px; line-height: 1.3; font-size: 19px; margin-bottom: 15px;"
+					th:placeholder="#{signup.nameyoread}" autocorrect="off"
+					autocapitalize="off">
+			</div>
 
-			</label> <input type="text" id="username" name="username"
-				style="width: 80%; height: 35px; line-height: 1.3; font-size: 19px; margin-bottom: 15px;"
-				th:placeholder="#{signup.mail}" autocorrect="off"
-				autocapitalize="off">
-		</div>
-		<div style="margin-bottom: 15px;">
-			<input name="password"
-				style="height: 35px; line-height: 1.3; font-size: 19px; margin-bottom: 15px;"
-				id="password" type="password" th:placeholder="#{signup.psw}"
-				value="" autocomplete="off">
-		</div>
+			<font th:if="${#fields.hasErrors('passwd')}" color="red"
+				th:errors="*{passwd}"></font>
+			<div style="margin-bottom: 15px;">
+				<input th:field="*{passwd}"
+					style="height: 35px; line-height: 1.3; font-size: 19px; margin-bottom: 15px;"
+					type="password" th:placeholder="#{signup.psw}" value=""
+					autocomplete="off">
+			</div>
+			<font th:if="${#fields.hasErrors('passwordcon')}" color="red"
+				th:errors="*{passwordcon}"></font> <font
+				th:if="${#fields.hasErrors('global')}" color="red"
+				th:errors="*{global}"></font>
+			<div style="margin-bottom: 15px;">
+				<input name="passwordcon"
+					style="height: 35px; line-height: 1.3; font-size: 19px; margin-bottom: 15px;"
+					id="password" type="password" th:placeholder="#{signup.pswcon}"
+					value="" autocomplete="off">
+			</div>
 
-		<div style="margin-bottom: 15px;">
-			<input name="passwordcon"
-				style="height: 35px; line-height: 1.3; font-size: 19px; margin-bottom: 15px;"
-				id="password" type="password" th:placeholder="#{signup.pswcon}"
-				value="" autocomplete="off">
+			<div style="margin-top: 15px; margin-bottom: 15px;">
+				<input type="submit" name="commit"
+					th:value="#{signup.signup.button}"
+					style="display: block !important; width: 90% !important; padding: 17px 27px !important;"
+					tabindex="3" id="sign_in_button" data-disable-with="Signing In...">
+			</div>
+			<div style="margin-top: 50px; margin-bottom: 15px;">
+				<label th:text="#{signup.signup.head}">会員登録されていますか？</label> <a
+					th:text="#{signup.signup.link}" class="link" href="/logininit">
+					新規登録 </a> </a>
+			</div>
 		</div>
-
-		<div style="margin-top: 15px; margin-bottom: 15px;">
-			<input type="submit" name="commit" th:value="#{signup.signup.button}"
-				style="display: block !important; width: 90% !important; padding: 17px 27px !important;"
-				tabindex="3" id="sign_in_button" data-disable-with="Signing In...">
-		</div>
-		<div style="margin-top: 50px; margin-bottom: 15px;">
-			<label th:text="#{signup.signup.head}">会員登録されていますか？</label> <a
-				th:text="#{signup.signup.link}" class="link" href="/logininit">
-				新規登録 </a> </a>
-		</div>
-	</div>
-
+	</form>
 </body>
 </html>
