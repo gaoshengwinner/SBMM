@@ -14,10 +14,32 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>sbmm</name>
 	<description>Demo project for Spring Boot</description>
-
+<!--  
 	<properties>
 		<java.version>1.8</java.version>
+
+
 	</properties>
+-->
+	<!-- [START gae_flex_mysql_properties] -->
+	<properties>
+		<java.version>1.8</java.version>
+		<!-- INSTANCE_CONNECTION_NAME from Cloud Console > SQL > Instance Details 
+			> Properties or `gcloud sql instances describe <instance> | grep connectionName` -->
+		<INSTANCE_CONNECTION_NAME>elite-bird-239507:us-central1:gshwinnerdb002</INSTANCE_CONNECTION_NAME>
+		<user>root</user>
+		<password>gaoshengwinneradmin</password>
+		<database>spmmdb</database>
+		<!-- [START_EXCLUDE] -->
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+
+		<failOnMissingWebXml>false</failOnMissingWebXml> <!-- REQUIRED -->
+
+		<jetty>9.4.4.v20170414</jetty>
+		<!-- [END_EXCLUDE] -->
+	</properties>
+	<!-- [END gae_flex_mysql_properties] -->
 
 	<dependencies>
 		<dependency>
@@ -40,11 +62,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
@@ -54,6 +71,45 @@
 			<artifactId>spring-boot-starter-logging</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>com.google.api-client</groupId>
+			<artifactId>google-api-client</artifactId>
+			<version>1.28.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.api-client</groupId>
+			<artifactId>google-api-client-appengine</artifactId>
+			<version>1.28.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.api-client</groupId>
+			<artifactId>google-api-client-servlet</artifactId>
+			<version>1.28.0</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
+		<!-- [START gae_flex_mysql_dependencies] -->
+		<dependency>                        <!-- http://dev.mysql.com/doc/connector-j/en/ -->
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>6.0.5</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.cloud.sql</groupId>
+			<artifactId>mysql-socket-factory-connector-j-6</artifactId>
+			<version>1.0.12</version>
+		</dependency>
+		<!-- [END gae_flex_mysql_dependencies] -->
+		<dependency>
+			<groupId>com.google.cloud</groupId>
+			<artifactId>google-cloud-storage</artifactId>
+			<version>1.49.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -64,5 +120,5 @@
 			</plugin>
 		</plugins>
 	</build>
-<packaging>jar</packaging>
+	<packaging>jar</packaging>
 </project>
