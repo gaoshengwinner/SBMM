@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import com.kou.sbmm.form.validator.CheckFeildEqual;
 @Configuration
 @CheckFeildEqual(feild1="passwd",feild2="passwordcon")
-public class AccForm {
+public class ProfileForm {
 	
 	public String getAccmail() {
 		return accmail;
@@ -37,13 +37,22 @@ public class AccForm {
 		this.passwordcon = passwordcon;
 	}
 	
-	@NotEmpty(message = "common.empty")
-	@Email(message = "common.mail.err")
 	private String accmail;
 	
-	@Length(min=5,max=32,message="common.length2.message")
+	@Length(min=5,max=32,message="common.length.message")
 	private String passwd;
 	
+	@NotEmpty(message = "common.empty")
+	private String oldpasswd;
+	
+	public String getOldpasswd() {
+		return oldpasswd;
+	}
+
+	public void setOldpasswd(String oldpasswd) {
+		this.oldpasswd = oldpasswd;
+	}
+
 	@NotEmpty(message = "common.empty")
 	private String passwordcon;
 	

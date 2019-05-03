@@ -42,6 +42,7 @@ public class Spmmdb0001ServiceImpl implements Spmmdb0001Service {
 	public void delete(Integer id) {
 		Spmmdb0001Dao.deleteById(id);
 	}
+
 	
 	@Override
 	public Optional<Spmmdb0001> findById(Integer id) {
@@ -76,6 +77,9 @@ public class Spmmdb0001ServiceImpl implements Spmmdb0001Service {
     public Spmmdb0001 findByMail(String mail){
     	
     	List<Spmmdb0001> list = Spmmdb0001Dao.findByAccmail(mail);
+    	if (list == null || list.size() < 1) {
+    		return null;
+    	}
     	return list.get(0);
     	
     }

@@ -2,8 +2,6 @@ package com.kou.sbmm.form;
 
 import javax.validation.constraints.*;
 
-import javax.validation.constraints.NotEmpty;
-
 import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -28,12 +26,22 @@ public class LoginForm {
 		this.passwd = passwd;
 	}
 	
-	@NotEmpty
-	@Email
+	@NotEmpty(message = "common.empty")
+	@Email(message = "common.mail.err")
 	private String accmail;
 	
-	@Length(min=5,max=32)
+	@NotEmpty(message = "common.empty")
 	private String passwd;
+	
+	private String rememberpassword;
+
+	public String getRememberpassword() {
+		return rememberpassword;
+	}
+
+	public void setRememberpassword(String rememberpassword) {
+		this.rememberpassword = rememberpassword;
+	}
 	
 
 }

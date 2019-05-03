@@ -10,7 +10,7 @@ import com.kou.sbmm.entity.Spmmdb0001;
 
 public interface Spmmdb0001Service {
 	void save(Spmmdb0001 spmmdb0001);
-
+	
 	void delete(Integer id);
 
 	List<Spmmdb0001> getAll();

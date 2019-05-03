@@ -21,7 +21,7 @@ import javax.validation.Payload;
 public @interface CheckFeildEqual {
 	String feild1() default "str1";
 	String feild2() default "str2";
-	String message() default "{signup.mail.format.err}";
+	String message() default "common.fiels.notsame.err";
 	
 	Class<?>[] groups() default { };
 
