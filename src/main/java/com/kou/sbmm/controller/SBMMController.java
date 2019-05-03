@@ -48,7 +48,7 @@ public class SBMMController {
 		Cookie cookie = new Cookie("userid", null);
 		response.addCookie(cookie);
 		model.put("loginForm", new LoginForm());
-		return "/html/login";
+		return "html/login";
 
 	}
 
@@ -56,7 +56,7 @@ public class SBMMController {
 	public String Signupinit(ModelMap model) {
 		logger.trace("login int trace");
 		model.put("accForm", new AccForm());
-		return "/html/signup";
+		return "html/signup";
 
 	}
 
@@ -82,9 +82,9 @@ public class SBMMController {
 			spmmdb0001.setNameyoread(accForm.getNameyoread());
 			spmmdb0001.setPasswd(accForm.getPasswd().getBytes());
 			spmmdb0001Service.save(spmmdb0001);
-			return "forward:/logininit";
+			return "forward:logininit";
 		} else {
-			return "/html/signup";
+			return "html/signup";
 		}
 
 	}
@@ -104,13 +104,13 @@ public class SBMMController {
 					cookie.setMaxAge(60 * 60 * 24 * 30);
 					response.addCookie(cookie);
 				}
-				return "forward:/home";
+				return "forward:home";
 			} else {
 				rs.addError(new FieldError("accForm", "accmail", "login.accpass.err"));
-				return "/html/login";
+				return "html/login";
 			}
 		} else {
-			return "/html/login";
+			return "html/login";
 		}
 	}
 
@@ -123,13 +123,13 @@ public class SBMMController {
 		}
 		loginInfo = (Spmmdb0001) httpSession.getAttribute("loginInfo");
 		if (loginInfo == null) {
-			return "forward:/logininit";
+			return "forward:logininit";
 		} else {
 			List<Spmmdb0002> listspmmdb0002 = spmmdb0002Service.findList(loginInfo.getAccid());
 			model.put("listspmmdb0002", listspmmdb0002);
 			model.put("messageForm", new MessageForm());
 
-			return "/html/index";
+			return "html/index";
 		}
 	}
 
@@ -138,14 +138,14 @@ public class SBMMController {
 		AutoLogin(request);
 		Spmmdb0001 loginInfo = (Spmmdb0001) httpSession.getAttribute("loginInfo");
 		if (loginInfo == null) {
-			return "forward:/logininit";
+			return "forward:logininit";
 		} else {
 			ProfileForm profileForm = new ProfileForm();
 			profileForm.setAccmail(loginInfo.getAccmail());
 			profileForm.setName(loginInfo.getName());
 			profileForm.setNameyoread(loginInfo.getNameyoread());
 			model.put("profileForm", profileForm);
-			return "/html/profile";
+			return "html/profile";
 		}
 	}
 
@@ -175,7 +175,7 @@ public class SBMMController {
 		List<Spmmdb0002> listspmmdb0002 = spmmdb0002Service.findList(loginInfo.getAccid());
 		model.put("listspmmdb0002", listspmmdb0002);
 
-		return "/html/index";
+		return "html/index";
 
 	}
 
@@ -185,22 +185,22 @@ public class SBMMController {
 		AutoLogin(request);
 		Spmmdb0001 loginInfo = (Spmmdb0001) httpSession.getAttribute("loginInfo");
 		if (loginInfo == null) {
-			return "forward:/logininit";
+			return "forward:logininit";
 		}
 		if (rs.hasErrors()) {
-			return "/html/profile";
+			return "html/profile";
 		}
 		String s = loginInfo == null || loginInfo.getPasswd() == null ? null : new String(loginInfo.getPasswd());
 		if (!profileForm.getOldpasswd().equals(s)) {
 			rs.addError(new FieldError("profileForm", "oldpasswd", "profile.password.err"));
-			return "/html/profile";
+			return "html/profile";
 		}
 		loginInfo.setAccauth('1');
 		loginInfo.setName(profileForm.getName());
 		loginInfo.setNameyoread(profileForm.getNameyoread());
 		loginInfo.setPasswd(profileForm.getPasswd().getBytes());
 		spmmdb0001Service.save(loginInfo);
-		return "/html/index";
+		return "html/index";
 
 	}
 

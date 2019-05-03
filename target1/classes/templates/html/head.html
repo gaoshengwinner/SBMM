@@ -1,0 +1,26 @@
+<DIV th:fragment="commehead">
+	<div
+		style="padding-left: 30px; height: 100px; width: 100%; background-color: cadetblue">
+		<table style="width: 100%">
+			<tr>
+				<td style="width: 50%" nowrap><a
+					style="text-decoration: none; font-weight: Normal; color: black"
+					href="/"><h1 th:text="#{login.welcome}">Welcome to
+							technology sharing</h1></a></td>
+				<td align="right" style="width: 30%;">
+					<h1>
+						<label th:if="${session.loginInfo}"> <a
+							style="text-decoration: none; font-weight: Normal; color: black"
+							th:if="${session.loginInfo}" href=/profileinit><font
+								th:text="${session.loginInfo.name}"></font></a>
+						</label>
+					</h1>
+				</td>
+				<td th:if="${session.loginInfo}" align="left" style="width: 20%;">&nbsp;&nbsp;&nbsp;<a href=/logininit>
+					<img
+						height="49px" alt="/logininit"
+						th:src="@{/static/images/logout.jpg}"></a></td>
+			</tr>
+		</table>
+	</div>
+</DIV>
