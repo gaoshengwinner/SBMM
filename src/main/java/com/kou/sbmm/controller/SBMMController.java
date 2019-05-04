@@ -43,25 +43,28 @@ public class SBMMController {
 
 	@RequestMapping(value = "/logininit")
 	public String Logininit(ModelMap model, HttpServletResponse response) {
-		logger.trace("login int trace");
+		logger.trace("/logininit start");
 		httpSession.setAttribute("loginInfo", null);
 		Cookie cookie = new Cookie("userid", null);
 		response.addCookie(cookie);
 		model.put("loginForm", new LoginForm());
+		logger.trace("/logininit end");
 		return "html/login";
 
 	}
 
 	@RequestMapping(value = "/signupinit")
 	public String Signupinit(ModelMap model) {
-		logger.trace("login int trace");
+		logger.trace("/signupinit start ");
 		model.put("accForm", new AccForm());
+		logger.trace("/signupinit end ");
 		return "html/signup";
 
 	}
 
 	@RequestMapping(value = "/signup")
 	public String Signup(@ModelAttribute("accForm") @Validated AccForm accForm, BindingResult rs) {
+		logger.trace("/signup start ");
 		boolean canSignup = true;
 		if (rs.hasErrors()) {
 			canSignup = false;
@@ -82,8 +85,10 @@ public class SBMMController {
 			spmmdb0001.setNameyoread(accForm.getNameyoread());
 			spmmdb0001.setPasswd(accForm.getPasswd().getBytes());
 			spmmdb0001Service.save(spmmdb0001);
+			logger.trace("/signup end ");
 			return "forward:logininit";
 		} else {
+			logger.trace("/signup end ");
 			return "html/signup";
 		}
 
@@ -92,7 +97,7 @@ public class SBMMController {
 	@RequestMapping(value = "/login")
 	public String Login(@ModelAttribute("loginForm") @Validated LoginForm old, BindingResult rs,
 			HttpServletResponse response) {
-		logger.trace("login int trace");
+		logger.trace("/login start ");
 		if (!rs.hasErrors()) {
 			Spmmdb0001 get = spmmdb0001Service.findByMail(old.getAccmail());
 			String s = get == null || get.getPasswd() == null ? null : new String(get.getPasswd());
@@ -104,40 +109,46 @@ public class SBMMController {
 					cookie.setMaxAge(60 * 60 * 24 * 30);
 					response.addCookie(cookie);
 				}
+				logger.trace("/login end ");
 				return "forward:home";
 			} else {
 				rs.addError(new FieldError("accForm", "accmail", "login.accpass.err"));
+				logger.trace("/login end ");
 				return "html/login";
 			}
 		} else {
+			logger.trace("/login end ");
 			return "html/login";
 		}
 	}
 
 	@RequestMapping(value = { "/", "/home" })
 	public String Home(ModelMap model, HttpServletRequest request) {
-
+		logger.trace("/ /home start ");
 		Spmmdb0001 loginInfo = (Spmmdb0001) httpSession.getAttribute("loginInfo");
 		if (loginInfo == null) {
 			AutoLogin(request);
 		}
 		loginInfo = (Spmmdb0001) httpSession.getAttribute("loginInfo");
 		if (loginInfo == null) {
+			logger.trace("/ /home end ");
 			return "forward:logininit";
 		} else {
 			List<Spmmdb0002> listspmmdb0002 = spmmdb0002Service.findList(loginInfo.getAccid());
 			model.put("listspmmdb0002", listspmmdb0002);
 			model.put("messageForm", new MessageForm());
-
+			logger.trace("/ /home end ");
 			return "html/index";
 		}
 	}
 
 	@RequestMapping(value = { "/profileinit" })
 	public String Profileinit(ModelMap model, HttpServletRequest request) {
+		logger.trace("/profileinit start ");
 		AutoLogin(request);
 		Spmmdb0001 loginInfo = (Spmmdb0001) httpSession.getAttribute("loginInfo");
 		if (loginInfo == null) {
+			logger.trace("/profileinit end ");
 			return "forward:logininit";
 		} else {
 			ProfileForm profileForm = new ProfileForm();
@@ -145,6 +156,7 @@ public class SBMMController {
 			profileForm.setName(loginInfo.getName());
 			profileForm.setNameyoread(loginInfo.getNameyoread());
 			model.put("profileForm", profileForm);
+			logger.trace("/profileinit end ");
 			return "html/profile";
 		}
 	}
@@ -152,6 +164,7 @@ public class SBMMController {
 	@RequestMapping(value = "/messagecreate")
 	public String Messagecreate(ModelMap model, @ModelAttribute("messageForm") @Validated MessageForm messageForm,
 			BindingResult rs, HttpServletResponse response) {
+		logger.trace("/messagecreate start ");
 		Spmmdb0001 loginInfo = (Spmmdb0001) httpSession.getAttribute("loginInfo");
 		if (!rs.hasErrors()) {
 			
@@ -175,6 +188,7 @@ public class SBMMController {
 		List<Spmmdb0002> listspmmdb0002 = spmmdb0002Service.findList(loginInfo.getAccid());
 		model.put("listspmmdb0002", listspmmdb0002);
 
+		logger.trace("/messagecreate end ");
 		return "html/index";
 
 	}
@@ -182,17 +196,21 @@ public class SBMMController {
 	@RequestMapping(value = "/profile")
 	public String Signup(@ModelAttribute("profileForm") @Validated ProfileForm profileForm, BindingResult rs,
 			HttpServletRequest request) {
+		logger.trace("/profile start ");
 		AutoLogin(request);
 		Spmmdb0001 loginInfo = (Spmmdb0001) httpSession.getAttribute("loginInfo");
 		if (loginInfo == null) {
+			logger.trace("/profile end ");
 			return "forward:logininit";
 		}
 		if (rs.hasErrors()) {
+			logger.trace("/profile end ");
 			return "html/profile";
 		}
 		String s = loginInfo == null || loginInfo.getPasswd() == null ? null : new String(loginInfo.getPasswd());
 		if (!profileForm.getOldpasswd().equals(s)) {
 			rs.addError(new FieldError("profileForm", "oldpasswd", "profile.password.err"));
+			logger.trace("/profile end ");
 			return "html/profile";
 		}
 		loginInfo.setAccauth('1');
@@ -200,6 +218,7 @@ public class SBMMController {
 		loginInfo.setNameyoread(profileForm.getNameyoread());
 		loginInfo.setPasswd(profileForm.getPasswd().getBytes());
 		spmmdb0001Service.save(loginInfo);
+		logger.trace("/profile end ");
 		return "html/index";
 
 	}
