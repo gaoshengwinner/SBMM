@@ -137,8 +137,39 @@ li a {
 		<div id="content">
 			<div id="tab1" class="item show">
 				<div th:each="m,iiter:${listspmmdb0002}">
-					<h5 th:text="${m.msgtitle}">title 11111</h5>
-					<h6 th:text="${m.createdatetime}+${m.name}">2019/09/01 高 勝</h6>
+					<h4 th:text="${m.msgtitle}">title 11111</h4>
+
+					<table style="width: 100%">
+						<tr>
+							<td style="width: 80%; word-break: keep-all;" nowrap>
+								<h5>
+									<lable th:text="${m.createdatetime}+${m.name}">2019/09/01
+									高 勝</lable>
+									<img th:if="${m.disopenging}" style="vertical-align: middle;"
+										height="49px" alt="opening"
+										th:src="@{/static/images/opening.png}"> <img
+										th:if="${m.dislocking}" style="vertical-align: middle;"
+										height="49px" alt="opening"
+										th:src="@{/static/images/locking.png}">
+								</h5>
+							</td>
+							<td style="width: 20%; word-break: keep-all;">
+							<a
+								th:href="@{'unlocktolock/?msgid=' + ${m.msgid}}"
+								th:if="${m.dislock}"><img style="vertical-align: middle;"
+									height="49px" alt="lock" th:src="@{/static/images/lock.png}"></a>
+									
+								<a th:href="@{'/locktounlock?msgid=' + ${m.msgid}}"
+								th:if="${m.disunlock}"><img style="vertical-align: middle;"
+									height="49px" alt="unlock"
+									th:src="@{/static/images/unlock.png}"></a>
+									
+									 <a th:href="@{'/delete?msgid=' + ${m.msgid}}"
+								th:if="${m.disdelete}"><img style="vertical-align: middle;"
+									height="49px" alt="delete"
+									th:src="@{/static/images/delete.png}"></a></td>
+						</tr>
+					</table>
 					<h6 th:text="${m.msgcont}"></h6>
 					<hr noshade>
 				</div>
