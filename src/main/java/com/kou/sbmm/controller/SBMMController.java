@@ -214,7 +214,7 @@ public class SBMMController {
 						String userid = cookie.getValue();
 						if (userid != null && !"".equals(userid)) {
 							Optional<Spmmdb0001> ologinInfo = spmmdb0001Service.findById(Integer.valueOf(userid));
-							if (ologinInfo != null) {
+							if (ologinInfo != null && ologinInfo.isPresent()) {
 								httpSession.setAttribute("loginInfo", ologinInfo.get());
 							}
 						}
