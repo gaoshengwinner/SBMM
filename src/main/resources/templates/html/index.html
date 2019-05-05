@@ -143,7 +143,7 @@ li a {
 						<tr>
 							<td style="width: 80%; word-break: keep-all;" nowrap>
 								<h5>
-									<lable th:text="${m.createdatetime}+${m.name}">2019/09/01
+									<lable th:text="${#dates.format(m.createdatetime,'YYYY-MM-dd HH:mm:ss')}+' ' +${m.name}">2019/09/01
 									高 勝</lable>
 									<img th:if="${m.disopenging}" style="vertical-align: middle;"
 										height="49px" alt="opening"
@@ -163,14 +163,16 @@ li a {
 								th:if="${m.disunlock}"><img style="vertical-align: middle;"
 									height="49px" alt="unlock"
 									th:src="@{/static/images/unlock.png}"></a>
-									
+									&nbsp;
 									 <a th:href="@{'/delete?msgid=' + ${m.msgid}}"
 								th:if="${m.disdelete}"><img style="vertical-align: middle;"
 									height="49px" alt="delete"
 									th:src="@{/static/images/delete.png}"></a></td>
 						</tr>
 					</table>
-					<h6 th:text="${m.msgcont}"></h6>
+					<div>
+					<h5 style="white-space: pre-line;" th:text="${m.msgcontlink}"></h5>
+					</div>
 					<hr noshade>
 				</div>
 			</div>

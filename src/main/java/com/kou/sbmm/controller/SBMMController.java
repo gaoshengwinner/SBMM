@@ -138,46 +138,7 @@ public class SBMMController {
 			return "forward:logininit";
 		} else {
 			List<Spmmdb0002> listspmmdb0002 = spmmdb0002Service.findList(loginInfo.getAccid());
-			List<MessageBean> beanlst = new ArrayList<MessageBean>();
-			for (Spmmdb0002 spmmdb0002 : listspmmdb0002) {
-				MessageBean messageBean = new MessageBean();
-				BeanUtils.copyProperties(spmmdb0002, messageBean);
-				boolean siDisopenging = false;
-				if (('2' == loginInfo.getAccauth() || loginInfo.getAccid().equals(messageBean.getAccid()))
-						&& (null != messageBean.getMsgpublictype() && '1' == messageBean.getMsgpublictype())) {
-					siDisopenging = true;
-				}
-				messageBean.setDisopenging(siDisopenging);
-
-				boolean dislocking = false;
-				if (('2' == loginInfo.getAccauth() || loginInfo.getAccid().equals(messageBean.getAccid()))
-						&& (null == messageBean.getMsgpublictype() || '1' != messageBean.getMsgpublictype())) {
-					dislocking = true;
-				}
-				messageBean.setDislocking(dislocking);
-
-				boolean disdelete = false;
-				if ('2' == loginInfo.getAccauth() || loginInfo.getAccid().equals(messageBean.getAccid())) {
-					disdelete = true;
-				}
-				messageBean.setDisdelete(disdelete);
-
-				boolean dislock = false;
-				if (('2' == loginInfo.getAccauth() || loginInfo.getAccid().equals(messageBean.getAccid()))
-						&& (null != messageBean.getMsgpublictype() && '1' == messageBean.getMsgpublictype())) {
-					dislock = true;
-				}
-				messageBean.setDislock(dislock);
-
-				boolean disunlock = false;
-				if (('2' == loginInfo.getAccauth() || loginInfo.getAccid().equals(messageBean.getAccid()))
-						&& (null == messageBean.getMsgpublictype() || '1' != messageBean.getMsgpublictype())) {
-					disunlock = true;
-				}
-				messageBean.setDisunlock(disunlock);
-
-				beanlst.add(messageBean);
-			}
+			List<MessageBean> beanlst = createMessList(loginInfo, listspmmdb0002);
 			model.put("listspmmdb0002", beanlst);
 			model.put("messageForm", new MessageForm());
 			logger.trace("/ /home end ");
@@ -229,7 +190,8 @@ public class SBMMController {
 			model.put("hasindexerr", "1");
 		}
 		List<Spmmdb0002> listspmmdb0002 = spmmdb0002Service.findList(loginInfo.getAccid());
-		model.put("listspmmdb0002", listspmmdb0002);
+		List<MessageBean> beanlst = createMessList(loginInfo, listspmmdb0002);
+		model.put("listspmmdb0002", beanlst);
 
 		logger.trace("/messagecreate end ");
 		return "html/index";
@@ -268,51 +230,100 @@ public class SBMMController {
 
 	@RequestMapping(value = "/unlocktolock")
 	public String unlocktolock(String msgid) {
-		//String msgid = (String) model.get("msgid");
+		// String msgid = (String) model.get("msgid");
 
 		Optional<Spmmdb0002> messageBean = spmmdb0002Service.findById(Integer.valueOf(msgid));
 		if (messageBean.isPresent()) {
 			Spmmdb0001 loginInfo = (Spmmdb0001) httpSession.getAttribute("loginInfo");
-			if (loginInfo != null && ('2' == loginInfo.getAccauth() || loginInfo.getAccid().equals(messageBean.get().getAccid()))
+			if (loginInfo != null
+					&& ('2' == loginInfo.getAccauth() || loginInfo.getAccid().equals(messageBean.get().getAccid()))
 					&& (null != messageBean.get().getMsgpublictype() && '1' == messageBean.get().getMsgpublictype())) {
 				messageBean.get().setMsgpublictype('0');
 				spmmdb0002Service.save(messageBean.get());
 			}
 		}
-		
+
 		return "forward:/home";
 	}
-	
+
 	@RequestMapping(value = "/locktounlock")
 	public String locktounlock(String msgid) {
-		//String msgid = (String) model.get("msgid");
+		// String msgid = (String) model.get("msgid");
 
 		Optional<Spmmdb0002> messageBean = spmmdb0002Service.findById(Integer.valueOf(msgid));
 		if (messageBean.isPresent()) {
 			Spmmdb0001 loginInfo = (Spmmdb0001) httpSession.getAttribute("loginInfo");
-			if (loginInfo != null && ('2' == loginInfo.getAccauth() || loginInfo.getAccid().equals(messageBean.get().getAccid()))
+			if (loginInfo != null
+					&& ('2' == loginInfo.getAccauth() || loginInfo.getAccid().equals(messageBean.get().getAccid()))
 					&& (null == messageBean.get().getMsgpublictype() || '1' != messageBean.get().getMsgpublictype())) {
 				messageBean.get().setMsgpublictype('1');
 				spmmdb0002Service.save(messageBean.get());
 			}
 		}
-		
+
 		return "forward:/home";
 	}
-	
+
 	@RequestMapping(value = "/delete")
 	public String delete(String msgid) {
-		//String msgid = (String) model.get("msgid");
+		// String msgid = (String) model.get("msgid");
 
 		Optional<Spmmdb0002> messageBean = spmmdb0002Service.findById(Integer.valueOf(msgid));
 		if (messageBean.isPresent()) {
 			Spmmdb0001 loginInfo = (Spmmdb0001) httpSession.getAttribute("loginInfo");
-			if (loginInfo != null && ('2' == loginInfo.getAccauth() || loginInfo.getAccid().equals(messageBean.get().getAccid()))) {
-					spmmdb0002Service.delete(Integer.valueOf(msgid));
+			if (loginInfo != null
+					&& ('2' == loginInfo.getAccauth() || loginInfo.getAccid().equals(messageBean.get().getAccid()))) {
+				spmmdb0002Service.delete(Integer.valueOf(msgid));
 			}
 		}
-		
+
 		return "forward:/home";
+	}
+
+	private List<MessageBean> createMessList(Spmmdb0001 loginInfo, List<Spmmdb0002> listspmmdb0002) {
+		List<MessageBean> beanlst = new ArrayList<MessageBean>();
+		for (Spmmdb0002 spmmdb0002 : listspmmdb0002) {
+			MessageBean messageBean = new MessageBean();
+			BeanUtils.copyProperties(spmmdb0002, messageBean);
+			boolean siDisopenging = false;
+			if (('2' == loginInfo.getAccauth() || loginInfo.getAccid().equals(messageBean.getAccid()))
+					&& (null != messageBean.getMsgpublictype() && '1' == messageBean.getMsgpublictype())) {
+				siDisopenging = true;
+			}
+			messageBean.setDisopenging(siDisopenging);
+
+			boolean dislocking = false;
+			if (('2' == loginInfo.getAccauth() || loginInfo.getAccid().equals(messageBean.getAccid()))
+					&& (null == messageBean.getMsgpublictype() || '1' != messageBean.getMsgpublictype())) {
+				dislocking = true;
+			}
+			messageBean.setDislocking(dislocking);
+
+			boolean disdelete = false;
+			if ('2' == loginInfo.getAccauth() || loginInfo.getAccid().equals(messageBean.getAccid())) {
+				disdelete = true;
+			}
+			messageBean.setDisdelete(disdelete);
+
+			boolean dislock = false;
+			if (('2' == loginInfo.getAccauth() || loginInfo.getAccid().equals(messageBean.getAccid()))
+					&& (null != messageBean.getMsgpublictype() && '1' == messageBean.getMsgpublictype())) {
+				dislock = true;
+			}
+			messageBean.setDislock(dislock);
+
+			boolean disunlock = false;
+			if (('2' == loginInfo.getAccauth() || loginInfo.getAccid().equals(messageBean.getAccid()))
+					&& (null == messageBean.getMsgpublictype() || '1' != messageBean.getMsgpublictype())) {
+				disunlock = true;
+			}
+			messageBean.setDisunlock(disunlock);
+
+			beanlst.add(messageBean);
+		}
+
+		return beanlst;
+
 	}
 
 	private void AutoLogin(HttpServletRequest request) {
