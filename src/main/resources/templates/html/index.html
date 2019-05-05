@@ -136,6 +136,21 @@ li a {
 		<!-- 对应显示内容 -->
 		<div id="content">
 			<div id="tab1" class="item show">
+				<div th:if="${haveChangePage}">
+					<table style="width: 100%">
+						<tr>
+							<td style="width: 50%"><a th:if="${havPrepage}" th:href="@{'/home/?page=' + ${prePage}}"><img
+									style="vertical-align: middle;" height="100px" alt="opening"
+									th:src="@{/static/images/left.png}"></a></td>
+							<td style="width: 50%; text-align: right"><a th:if="${havNexpage}" th:href="@{'/home/?page=' + ${nextPage}}"><img
+									style="vertical-align: middle;" height="100px" alt="opening"
+									th:src="@{/static/images/right.png}"></a></td>
+						</tr>
+					</table>
+					<hr noshade>
+					<hr noshade>
+				</div>
+				<br />
 				<div th:each="m,iiter:${listspmmdb0002}">
 					<h4 th:text="${m.msgtitle}">title 11111</h4>
 
@@ -143,7 +158,8 @@ li a {
 						<tr>
 							<td style="width: 80%; word-break: keep-all;" nowrap>
 								<h5>
-									<lable th:text="${#dates.format(m.createdatetime,'YYYY-MM-dd HH:mm:ss')}+' ' +${m.name}">2019/09/01
+									<lable
+										th:text="${#dates.format(m.createdatetime,'YYYY-MM-dd HH:mm:ss')}+' ' +${m.name}">2019/09/01
 									高 勝</lable>
 									<img th:if="${m.disopenging}" style="vertical-align: middle;"
 										height="49px" alt="opening"
@@ -153,25 +169,23 @@ li a {
 										th:src="@{/static/images/locking.png}">
 								</h5>
 							</td>
-							<td style="width: 20%; word-break: keep-all;">
-							<a
-								th:href="@{'unlocktolock/?msgid=' + ${m.msgid}}"
+							<td style="width: 20%; word-break: keep-all;"><a
+								th:href="@{'/unlocktolock/?msgid=' + ${m.msgid}}"
 								th:if="${m.dislock}"><img style="vertical-align: middle;"
 									height="49px" alt="lock" th:src="@{/static/images/lock.png}"></a>
-									
+
 								<a th:href="@{'/locktounlock?msgid=' + ${m.msgid}}"
 								th:if="${m.disunlock}"><img style="vertical-align: middle;"
 									height="49px" alt="unlock"
-									th:src="@{/static/images/unlock.png}"></a>
-									&nbsp;
-									 <a th:href="@{'/delete?msgid=' + ${m.msgid}}"
+									th:src="@{/static/images/unlock.png}"></a> &nbsp; <a
+								th:href="@{'/delete?msgid=' + ${m.msgid}}"
 								th:if="${m.disdelete}"><img style="vertical-align: middle;"
 									height="49px" alt="delete"
 									th:src="@{/static/images/delete.png}"></a></td>
 						</tr>
 					</table>
 					<div>
-					<h5 style="white-space: pre-line;" th:text="${m.msgcontlink}"></h5>
+						<h5 style="white-space: pre-line;" th:text="${m.msgcontlink}"></h5>
 					</div>
 					<hr noshade>
 				</div>

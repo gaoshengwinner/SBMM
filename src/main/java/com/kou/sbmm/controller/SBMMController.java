@@ -126,7 +126,7 @@ public class SBMMController {
 	}
 
 	@RequestMapping(value = { "/", "/home" })
-	public String Home(ModelMap model, HttpServletRequest request) {
+	public String Home(ModelMap model, String page, HttpServletRequest request) {
 		logger.trace("/ /home start ");
 		Spmmdb0001 loginInfo = (Spmmdb0001) httpSession.getAttribute("loginInfo");
 		if (loginInfo == null) {
@@ -138,7 +138,7 @@ public class SBMMController {
 			return "forward:logininit";
 		} else {
 			List<Spmmdb0002> listspmmdb0002 = spmmdb0002Service.findList(loginInfo.getAccid());
-			List<MessageBean> beanlst = createMessList(loginInfo, listspmmdb0002);
+			List<MessageBean> beanlst = createMessList(loginInfo, listspmmdb0002, page, model);
 			model.put("listspmmdb0002", beanlst);
 			model.put("messageForm", new MessageForm());
 			logger.trace("/ /home end ");
@@ -166,8 +166,9 @@ public class SBMMController {
 	}
 
 	@RequestMapping(value = "/messagecreate")
-	public String Messagecreate(ModelMap model, @ModelAttribute("messageForm") @Validated MessageForm messageForm,
-			BindingResult rs, HttpServletResponse response) {
+	public String Messagecreate(ModelMap model, String page,
+			@ModelAttribute("messageForm") @Validated MessageForm messageForm, BindingResult rs,
+			HttpServletResponse response) {
 		logger.trace("/messagecreate start ");
 		Spmmdb0001 loginInfo = (Spmmdb0001) httpSession.getAttribute("loginInfo");
 		if (!rs.hasErrors()) {
@@ -190,7 +191,7 @@ public class SBMMController {
 			model.put("hasindexerr", "1");
 		}
 		List<Spmmdb0002> listspmmdb0002 = spmmdb0002Service.findList(loginInfo.getAccid());
-		List<MessageBean> beanlst = createMessList(loginInfo, listspmmdb0002);
+		List<MessageBean> beanlst = createMessList(loginInfo, listspmmdb0002, page, model);
 		model.put("listspmmdb0002", beanlst);
 
 		logger.trace("/messagecreate end ");
@@ -280,9 +281,50 @@ public class SBMMController {
 		return "forward:/home";
 	}
 
-	private List<MessageBean> createMessList(Spmmdb0001 loginInfo, List<Spmmdb0002> listspmmdb0002) {
+	private List<MessageBean> createMessList(Spmmdb0001 loginInfo, List<Spmmdb0002> listspmmdb0002, String page,
+			ModelMap model) {
+		if (listspmmdb0002 == null) {
+			listspmmdb0002 = new ArrayList<Spmmdb0002> ();
+		}
 		List<MessageBean> beanlst = new ArrayList<MessageBean>();
-		for (Spmmdb0002 spmmdb0002 : listspmmdb0002) {
+		int iPage = 0;
+		if (page == null || page.equals("")) {
+
+		} else {
+			iPage = Integer.valueOf(page);
+		}
+		int pageline = 10;
+		int maxPage = listspmmdb0002.size() / pageline + (listspmmdb0002.size() % pageline > 0 ? 1 : 0) - 1;
+		if (iPage > maxPage) {
+			iPage = maxPage;
+		}
+		int begLine = pageline * iPage;
+		int endLine = pageline * (iPage + 1);
+		if (endLine > listspmmdb0002.size()) {
+			endLine = listspmmdb0002.size();
+		}
+
+		int prePage = 0;
+		boolean havPrepage = false;
+		if (iPage > 0) {
+			prePage = iPage - 1;
+			havPrepage = true;
+		}
+
+		int nextPage = 0;
+		boolean havNexpage = false;
+		if (iPage < maxPage) {
+			nextPage = iPage + 1;
+			havNexpage = true;
+		}
+		boolean haveChangePage = havPrepage | havNexpage;
+		model.put("prePage",prePage);
+		model.put("havPrepage",havPrepage);
+		model.put("nextPage",nextPage);
+		model.put("havNexpage",havNexpage);
+		model.put("haveChangePage",haveChangePage);
+
+		for (Spmmdb0002 spmmdb0002 : listspmmdb0002.subList(begLine, endLine)) {
 			MessageBean messageBean = new MessageBean();
 			BeanUtils.copyProperties(spmmdb0002, messageBean);
 			boolean siDisopenging = false;
